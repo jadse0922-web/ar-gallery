@@ -1,0 +1,107 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style></head><body><title>그림 친구 AR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
+<style>
+/* Layout: one full-screen stage per mode; a crayon-paper start card, a camera stage, a framed preview stage. */
+:root {
+  --paper: #fbf6ea;      /* drawing-paper white */
+  --ink: #2b2a3d;        /* marker navy */
+  --muted: #6d6a7c;
+  --marker-red: #d9342b; /* the red of the crest */
+  --marker-yellow: #f5c518;
+  --wood: #d8b98a;
+  --night: #15141f;
+  --display: "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --body: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 16px; overflow: hidden; }
+.screen { position: fixed; inset: 0; display: flex; flex-direction: column; }
+
+/* start */
+#start { align-items: center; justify-content: center; padding-inline: 20px; padding-block: calc(24px + env(safe-area-inset-top, 0px)) calc(24px + env(safe-area-inset-bottom, 0px));
+  background:
+    radial-gradient(circle at 15% 12%, rgba(245,197,24,.28) 0 70px, transparent 71px),
+    radial-gradient(circle at 88% 85%, rgba(217,52,43,.14) 0 90px, transparent 91px),
+    var(--paper); }
+.card { width: min(100%, 380px); display: flex; flex-direction: column; gap: 18px; text-align: center; }
+.frame { margin: 0 auto; width: 150px; aspect-ratio: 760/1085; max-width: 100%; border: 10px solid var(--wood); background: #fff center/cover no-repeat; box-shadow: 0 10px 24px rgba(43,42,61,.18); transform: rotate(-2deg); }
+.eyebrow { font-family: var(--display); color: var(--marker-red); letter-spacing: .08em; font-size: 15px; }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 34px; line-height: 1.15; text-wrap: balance; }
+.lead { margin: 0; color: var(--muted); line-height: 1.6; }
+.btn { appearance: none; border: 0; cursor: pointer; font-family: var(--display); font-size: 21px; padding: 16px 20px; border-radius: 999px; background: var(--ink); color: var(--paper); box-shadow: 0 4px 0 #000; }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #000; }
+.btn:disabled { opacity: .4; }
+.btn:focus-visible, .ghost:focus-visible { outline: 3px solid var(--marker-yellow); outline-offset: 3px; }
+.ghost { appearance: none; background: none; border: 0; color: var(--ink); font-family: var(--body); font-size: 15px; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; padding: 6px; }
+.err { margin: 0; padding: 12px 14px; border-radius: 12px; background: #fff; border: 2px dashed var(--marker-red); color: var(--ink); font-size: 14px; line-height: 1.55; text-align: left; }
+
+/* AR */
+#ar { background: var(--night); color: #fff; }
+#ar-stage { position: absolute; inset: 0; }
+#ar-stage video { object-fit: cover; }
+#scan { position: absolute; left: 50%; top: 46%; width: min(64vw, 300px); aspect-ratio: 760/1085; transform: translate(-50%,-50%); pointer-events: none; }
+#scan i { position: absolute; width: 34px; height: 34px; border: 5px solid var(--marker-yellow); }
+#scan i:nth-child(1) { left: 0; top: 0; border-right: 0; border-bottom: 0; border-radius: 10px 0 0 0; }
+#scan i:nth-child(2) { right: 0; top: 0; border-left: 0; border-bottom: 0; border-radius: 0 10px 0 0; }
+#scan i:nth-child(3) { left: 0; bottom: 0; border-right: 0; border-top: 0; border-radius: 0 0 0 10px; }
+#scan i:nth-child(4) { right: 0; bottom: 0; border-left: 0; border-top: 0; border-radius: 0 0 10px 0; }
+@media (prefers-reduced-motion: no-preference) { #scan { animation: breathe 1.6s ease-in-out infinite; } }
+@keyframes breathe { 50% { transform: translate(-50%,-50%) scale(1.04); } }
+.bar { position: absolute; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-inline: 16px; }
+.bar.top { top: 0; padding-top: calc(14px + env(safe-area-inset-top, 0px)); }
+.bar.bottom { bottom: 0; padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); justify-content: center; flex-direction: column; }
+.chip { font-family: var(--display); background: rgba(21,20,31,.6); color: #fff; padding: 8px 14px; border-radius: 999px; font-size: 16px; }
+.status { font-size: 15px; background: rgba(21,20,31,.6); padding: 8px 14px; border-radius: 12px; text-align: center; }
+.status:empty { display: none; }
+.pill { appearance: none; border: 0; cursor: pointer; font-family: var(--display); font-size: 17px; padding: 10px 18px; border-radius: 999px; background: var(--marker-yellow); color: var(--ink); }
+
+/* preview */
+#preview { background: linear-gradient(#efe6d2, #e3d6bb); }
+#pv-stage { position: absolute; inset: 0; }
+#pv-stage canvas { display: block; width: 100%; height: 100%; }
+#preview .chip { background: var(--ink); }
+#preview .status { background: rgba(43,42,61,.85); color: #fff; }
+</style>
+
+<section id="start" class="screen">
+  <div class="card">
+    <div class="frame" id="thumb" role="img" aria-label="그림 미리보기"></div>
+    <div class="eyebrow">우리 반 그림 전시</div>
+    <h1><span data-title>그림 친구</span>가<br>밖으로 나올 거예요</h1>
+    <p class="lead" id="start-msg">카메라를 켜고 액자 속 그림을 비추면,<br>그림 속 친구가 달려 나와요.</p>
+    <button class="btn" id="btn-ar" type="button">카메라로 그림 비추기</button>
+    <p class="err" id="cam-error" hidden>카메라를 켜지 못했어요. 휴대폰 설정에서 이 브라우저의 카메라 사용을 허용한 뒤 다시 눌러 주세요. 카카오톡 안에서 열렸다면 오른쪽 위 메뉴의 ‘다른 브라우저로 열기’를 눌러 주세요.</p>
+    <button class="ghost" id="btn-preview" type="button">카메라 없이 미리보기</button>
+  </div>
+</section>
+
+<section id="ar" class="screen" hidden>
+  <div id="ar-stage"></div>
+  <div id="scan" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="bar top"><span class="chip" data-title>그림 친구</span><button class="ghost" id="btn-preview2" type="button" style="color:#fff">미리보기</button></div>
+  <div class="bar bottom"><div class="status" id="ar-status" aria-live="polite"></div><button class="pill" id="ar-replay" type="button">다시 보기</button></div>
+</section>
+
+<section id="preview" class="screen" hidden>
+  <div id="pv-stage"></div>
+  <div class="bar top"><span class="chip" data-title>그림 친구</span><button class="ghost" id="pv-back" type="button">처음으로</button></div>
+  <div class="bar bottom"><div class="status">미리보기 화면이에요. 실제로는 휴대폰 카메라로 액자를 비추면 이렇게 보여요.</div><button class="pill" id="pv-replay" type="button">다시 보기</button></div>
+</section>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+  "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+} }
+</script>
+<script>
+  (function () {
+    var p = new URLSearchParams(location.search); var id = (p.get('id') || location.hash.slice(1) || '01').replace(/[^0-9a-zA-Z_-]/g, '') || '01';
+    document.getElementById('thumb').style.backgroundImage = 'url(drawings/' + id + '/target.jpg)';
+  })();
+</script>
+<script type="module" src="app.js"></script>
+</body></html>
