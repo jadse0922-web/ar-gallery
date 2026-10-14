@@ -1,0 +1,45 @@
+{
+ "title": "4번 작품",
+ "W": 1000,
+ "H": 689,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 181,
+  "y": 66,
+  "w": 724,
+  "h": 550
+ },
+ "actors": [
+  {
+   "id": "ball",
+   "x": 500,
+   "y": 81,
+   "w": 115,
+   "h": 117,
+   "img": "ball.png",
+   "motion": "toss",
+   "flip": false
+  },
+  {
+   "id": "turtle",
+   "x": 196,
+   "y": 158,
+   "w": 329,
+   "h": 443,
+   "img": "turtle.png",
+   "motion": "cheer",
+   "side": -1
+  },
+  {
+   "id": "boy",
+   "x": 620,
+   "y": 144,
+   "w": 270,
+   "h": 418,
+   "img": "boy.png",
+   "motion": "cheer",
+   "side": 1
+  }
+ ]
+}

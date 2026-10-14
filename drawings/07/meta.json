@@ -1,0 +1,25 @@
+{
+ "title": "7번 작품",
+ "W": 1000,
+ "H": 706,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 147,
+  "y": 72,
+  "w": 559,
+  "h": 537
+ },
+ "actors": [
+  {
+   "id": "ditto",
+   "x": 162,
+   "y": 87,
+   "w": 529,
+   "h": 507,
+   "img": "ditto.png",
+   "motion": "squish",
+   "flip": false
+  }
+ ]
+}

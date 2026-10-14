@@ -1,0 +1,24 @@
+{
+ "title": "3번 작품",
+ "W": 731,
+ "H": 999,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 35,
+  "y": 185,
+  "w": 630,
+  "h": 645
+ },
+ "actors": [
+  {
+   "id": "seahorse",
+   "x": 50,
+   "y": 200,
+   "w": 600,
+   "h": 615,
+   "img": "seahorse.png",
+   "motion": "swim"
+  }
+ ]
+}

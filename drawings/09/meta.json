@@ -1,0 +1,24 @@
+{
+ "title": "9번 작품",
+ "W": 753,
+ "H": 1000,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 128,
+  "y": 184,
+  "w": 526,
+  "h": 624
+ },
+ "actors": [
+  {
+   "id": "sprout",
+   "x": 143,
+   "y": 199,
+   "w": 496,
+   "h": 594,
+   "img": "sprout.png",
+   "motion": "spin"
+  }
+ ]
+}

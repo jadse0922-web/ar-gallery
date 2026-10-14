@@ -1,0 +1,24 @@
+{
+ "title": "달꽃이",
+ "W": 729,
+ "H": 1000,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 30,
+  "y": 125,
+  "w": 650,
+  "h": 680
+ },
+ "actors": [
+  {
+   "id": "rabbit",
+   "x": 45,
+   "y": 140,
+   "w": 620,
+   "h": 650,
+   "img": "rabbit.png",
+   "motion": "hop"
+  }
+ ]
+}

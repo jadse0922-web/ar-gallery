@@ -1,0 +1,25 @@
+{
+ "title": "5번 작품",
+ "W": 753,
+ "H": 1000,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 148,
+  "y": 268,
+  "w": 418,
+  "h": 511
+ },
+ "actors": [
+  {
+   "id": "castle",
+   "x": 163,
+   "y": 283,
+   "w": 388,
+   "h": 481,
+   "img": "castle.png",
+   "motion": "grow",
+   "flip": false
+  }
+ ]
+}

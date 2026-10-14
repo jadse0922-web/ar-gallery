@@ -1,1 +1,34 @@
-{"title": "1번 작품", "targetW": 760, "targetH": 1085, "char": {"x": 0, "y": 132, "w": 760, "h": 777}, "split": [300, 462]}
+{
+ "title": "1번 작품",
+ "W": 760,
+ "H": 1085,
+ "frame": false,
+ "plate": {
+  "img": "plate.jpg",
+  "x": 0,
+  "y": 0,
+  "w": 760,
+  "h": 1085
+ },
+ "actors": [
+  {
+   "id": "bird",
+   "x": 0,
+   "y": 132,
+   "w": 760,
+   "h": 777,
+   "motion": "run",
+   "wings": {
+    "split": [
+     300,
+     462
+    ],
+    "imgs": [
+     "wingL.png",
+     "body.png",
+     "wingR.png"
+    ]
+   }
+  }
+ ]
+}
