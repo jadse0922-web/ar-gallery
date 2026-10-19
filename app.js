@@ -13,8 +13,8 @@ const screens = { start: $('#start'), ar: $('#ar'), preview: $('#preview') };
 function show(name) { for (const k in screens) screens[k].hidden = k !== name; }
 const base = (id) => `drawings/${id}/`;
 
-const MOTION_NAME = { run: '달려 나오기', hop: '통통 뛰기', swim: '헤엄치기', cheer: '공놀이', toss: '공놀이', grow: '커지며 튀어나오기', fly: '날아다니기', squish: '말랑말랑 점프', cruise: '헤엄치기', dash: '달려 나오기', spin: '빙글빙글 돌기', float: '둥실둥실', peek: '빼꼼 숨바꼭질' };
-const MOTION_LEAD = { run: '달려 나와요', hop: '통통 뛰어나와요', swim: '헤엄쳐 나와요', cheer: '나와서 공놀이를 해요', grow: '커다랗게 튀어나와요', fly: '날아올라요', squish: '말랑말랑 뛰어나와요', cruise: '헤엄쳐 나와요', dash: '달려 나와요', spin: '빙글빙글 돌며 나와요', peek: '나와서 숨바꼭질을 해요' };
+const MOTION_NAME = { run: '달려 나오기', hop: '통통 뛰기', swim: '헤엄치기', cheer: '공놀이', toss: '공놀이', grow: '커지며 튀어나오기', fly: '날아다니기', squish: '말랑말랑 점프', cruise: '헤엄치기', dash: '달려 나오기', spin: '빙글빙글 돌기', float: '둥실둥실', peek: '빼꼼 숨바꼭질', dance: '흔들흔들 춤추기', zap: '번개처럼 달리기', shine: '반짝반짝 떠오르기' };
+const MOTION_LEAD = { run: '달려 나와요', hop: '통통 뛰어나와요', swim: '헤엄쳐 나와요', cheer: '나와서 공놀이를 해요', grow: '커다랗게 튀어나와요', fly: '날아올라요', squish: '말랑말랑 뛰어나와요', cruise: '헤엄쳐 나와요', dash: '달려 나와요', spin: '빙글빙글 돌며 나와요', peek: '나와서 숨바꼭질을 해요', dance: '나와서 흔들흔들 춤을 춰요', zap: '번개처럼 달려 나와요', shine: '반짝이며 떠올라요' };
 function mainMotion(meta) { const a = meta.actors.find((x) => !['toss', 'float'].includes(x.motion)) || meta.actors[0]; return a.motion; }
 function withSubject(word) {
   const c = word.charCodeAt(word.length - 1);
@@ -156,6 +156,26 @@ const M = {
     if (u > 6.1) f.rz = 0.12 * Math.sin((u - 6.1) * 14) * (1 - (u - 6.1) / 0.9);
     return { x: f.x, y, z: f.z, rz: f.rz, s, face: u < 1.5 ? -1 : 1 };
   }, tick(u, A, C, p) { A.on('pop', u > 5.3 ? 1 : 0, (v) => v && C.fx(new THREE.Vector3(p.x, p.y + A.hh * p.s, 0.06), 14, 'star')); } },
+
+  dance: { s: 0.55, act(u, A, C) {
+    const spin = clamp((frac(u / 3.5) - 0.72) / 0.28);
+    return { x: 0.22 * Math.sin(u * TAU / 3.5), y: C.gy + A.hh * 0.55 + Math.abs(Math.sin(u * Math.PI * 2)) * 0.06, z: OUT_Z,
+      rz: 0.28 * Math.sin(u * TAU) * (1 - spin), ry: TAU * ease(spin), sy: 1 + 0.06 * Math.sin(u * TAU * 2), sx: 1 - 0.04 * Math.sin(u * TAU * 2), bottom: true, face: 1 };
+  }, tick(u, A, C, p) { A.every('twinkle', 0.3, () => C.fx(new THREE.Vector3(p.x + (Math.random() - 0.5) * 0.35, p.y + A.hh * p.s * 0.7, p.z), 1, 'twinkle')); } },
+
+  zap: { s: 0.5, act(u, A, C) {
+    const T = 0.875, k = Math.floor(u / T), f = frac(u / T);
+    const xs = [0, -0.3, 0.28, -0.22, 0.3, -0.28, 0.24, -0.15, 0];
+    const a = xs[Math.min(k, 8)], b = xs[Math.min(k + 1, 8)], g = 1 - Math.pow(1 - f, 2);
+    return { x: lerp(a, b, g), y: C.gy + A.hh * 0.5 + Math.sin(Math.PI * f) * 0.12, z: OUT_Z + 0.08 * Math.sin(k * 1.7), face: b === a ? 1 : Math.sign(b - a), rz: (b - a) * -0.4 * Math.sin(Math.PI * f) };
+  }, tick(u, A, C, p) { A.on('turn', Math.floor(u / 0.875), () => C.fx(new THREE.Vector3(p.x, p.y, p.z + 0.03), 10, 'star')); } },
+
+  shine: { s: 0.55, act(u, A, C) {
+    return { x: 0.08 * Math.sin(u * 0.9), y: 0.1 + 0.06 * Math.sin(u * 1.3), z: OUT_Z, ry: 0.25 * Math.sin(u * 0.8), rz: 0.05 * Math.sin(u * 1.7), face: 1 };
+  }, tick(u, A, C, p) {
+    A.every('rain', 0.14, () => C.fx(new THREE.Vector3(p.x + (Math.random() - 0.5) * A.hw * p.s * 2, p.y - A.hh * p.s * 0.5, p.z), 1, 'twinkle'));
+    A.every('burst', 1.4, () => C.fx(new THREE.Vector3(p.x, p.y + A.hh * p.s * 0.6, p.z + 0.03), 6, 'star'));
+  } },
 };
 
 // ---------------------------------------------------------------- scene

@@ -1,0 +1,24 @@
+{
+ "title": "가르마 꽃버전",
+ "W": 751,
+ "H": 1000,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 31,
+  "y": 160,
+  "w": 579,
+  "h": 675
+ },
+ "actors": [
+  {
+   "id": "garma",
+   "x": 46,
+   "y": 175,
+   "w": 549,
+   "h": 645,
+   "img": "garma.png",
+   "motion": "dance"
+  }
+ ]
+}

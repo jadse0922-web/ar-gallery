@@ -1,0 +1,24 @@
+{
+ "title": "12번 작품",
+ "W": 751,
+ "H": 1000,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 196,
+  "y": 207,
+  "w": 514,
+  "h": 505
+ },
+ "actors": [
+  {
+   "id": "pika",
+   "x": 211,
+   "y": 222,
+   "w": 484,
+   "h": 475,
+   "img": "pika.png",
+   "motion": "zap"
+  }
+ ]
+}

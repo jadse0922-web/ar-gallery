@@ -1,0 +1,25 @@
+{
+ "title": "메가디안시",
+ "W": 751,
+ "H": 1000,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 65,
+  "y": 118,
+  "w": 640,
+  "h": 729
+ },
+ "actors": [
+  {
+   "id": "diancie",
+   "x": 80,
+   "y": 133,
+   "w": 610,
+   "h": 699,
+   "img": "diancie.png",
+   "motion": "shine",
+   "flip": false
+  }
+ ]
+}
