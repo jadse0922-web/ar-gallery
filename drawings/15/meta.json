@@ -1,0 +1,24 @@
+{
+ "title": "15번 작품",
+ "W": 722,
+ "H": 1000,
+ "frame": true,
+ "plate": {
+  "img": "plate.png",
+  "x": 117,
+  "y": 84,
+  "w": 395,
+  "h": 629
+ },
+ "actors": [
+  {
+   "id": "deer",
+   "x": 132,
+   "y": 99,
+   "w": 365,
+   "h": 599,
+   "img": "deer.png",
+   "motion": "gallop"
+  }
+ ]
+}
